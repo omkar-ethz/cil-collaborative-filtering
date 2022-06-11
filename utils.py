@@ -35,12 +35,16 @@ def extract_submission(matrix: np.ndarray, file: str = "sumbission"):
 def zscore_masked_items(matrix: np.ndarray, mask: np.ndarray) -> np.ndarray:
     norm_matrix = np.copy(matrix).astype(float)
     maskT = mask.T
+    means = []
+    stddevs = []
     for j, matrixj in enumerate(matrix.T):
         mean = np.mean(matrixj[maskT[j]!=0])
         std = np.std(matrixj[maskT[j]!=0])
+        means.insert(j, mean)
+        stddevs.insert(j, std)
         norm_matrix[:,j][np.where(mask[:,j]!=0)] -= mean
         norm_matrix[:,j][np.where(mask[:,j]!=0)] /= std
-    return norm_matrix
+    return norm_matrix, means, stddevs
 
 def zscore_masked_users(matrix: np.ndarray, mask: np.ndarray) -> np.ndarray:
     norm_matrix = np.copy(matrix).astype(float)
