@@ -7,6 +7,13 @@ import numpy as np
 
 NUMBER_OF_USERS = 10000
 NUMBER_OF_MOVIES = 1000
+RAND_SEED = 42
+
+def extract_for_ensemble(matrix, fname, fold, train):
+    full_path = "./data/ensemble/final/"+fname
+    if train:
+        full_path = "./data/ensemble/train/"+str(fold)+"/"+fname
+    np.save(full_path, matrix)
 
 def split_dataset(data, train_size=0.9, random_state=None):
     # Split the dataset into train and test
