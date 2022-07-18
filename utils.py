@@ -30,11 +30,18 @@ def get_rmse_score(predictions, target_values):
         y_true.append(target_values[user][item])
     return mean_squared_error(y_pred, y_true, squared=False)
 
-def create_matrix_from_raw(data_pd):
+def user_movies_pred(data_pd, pred=True):
     users, movies = \
         [np.squeeze(arr) for arr in \
         np.split(data_pd.Id.str.extract("r(\d+)_c(\d+)").values.astype(int) - 1, 2, axis=-1)]
-    predictions = data_pd.Prediction.values
+    if pred:
+        predictions = data_pd.Prediction.values
+        return users, movies, predictions
+    else:
+        return users, movies, None
+
+def create_matrix_from_raw(data_pd):
+    users, movies, predictions = user_movies_pred(data_pd)
     # Create data matrix
     matrix = np.full((NUMBER_OF_USERS, NUMBER_OF_MOVIES), 0)
     for user , movie , pred in zip(users , movies ,predictions):
@@ -58,9 +65,7 @@ def import_data_to_matrix() -> np.ndarray:
 def extract_submission(matrix: np.ndarray, file: str = "sumbission"):
     # Extract sumbission users and movies
     sample_pd = pd.read_csv("./data/sampleSubmission.csv")
-    test_users, test_movies = \
-        [np.squeeze(arr) for arr in \
-        np.split(sample_pd.Id.str.extract("r(\d+)_c(\d+)").values.astype(int) - 1, 2, axis=-1)]
+    test_users, test_movies, _ = user_movies_pred(sample_pd, pred=False)
 
     timestamp = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
     with open("./data/submissions/" + file + "_" + timestamp + ".csv", "w") as f:
