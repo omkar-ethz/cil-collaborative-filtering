@@ -1,8 +1,10 @@
+# For more information about individual methods please refer to their notebook
+# e.g. For IRSVD the corresponding notebook is irsvd.ipynb
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-from utils import NUMBER_OF_MOVIES, NUMBER_OF_USERS, import_data_to_matrix_split, extract_submission, import_data_to_matrix
+from utils import import_data_to_matrix_split, extract_submission, import_data_to_matrix
 from utils import get_rmse_score, zscore_masked_items
 
 class IRSVD():
@@ -391,66 +393,4 @@ class SVT():
         for j in range(self.num_items):
             rec_A[:,j] *= self.stddev_A[j]
             rec_A[:,j] += self.mean_A[j]
-        return rec_A
-
-import mxnet as mx
-# Deep Matrix Factorization
-class DMF():
-    def __init__(self, A, batch_size=1024, dim_user=15, dim_movie=15, epochs=10):
-        self.A = A
-        self.train_users, self.train_items = self.A.nonzero()
-        self.train_ratings = A[self.train_users, self.train_items]
-        self.num_users, self.num_items = self.A.shape
-        self.batch_size = batch_size
-        self.dim_user = dim_user
-        self.dim_movie = dim_movie
-        self.epochs = epochs
-
-
-    def train(self, test_matrix=None):
-        X_train = mx.io.NDArrayIter({'user': self.train_users, 'movie': self.train_items}, 
-                            label=self.train_ratings, batch_size=self.batch_size)
-        
-        if test_matrix is not None:
-            test_users, test_items = test_matrix.nonzero()
-            test_ratings = test_matrix[test_users, test_items]
-            X_eval = mx.io.NDArrayIter({'user': test_users, 'movie': test_items}, 
-                            label=test_ratings, batch_size=self.batch_size)
-        else:
-            X_eval = None
-        user = mx.symbol.Variable("user")
-        user = mx.symbol.Embedding(data=user, input_dim=self.num_users, output_dim=self.dim_user)
-
-        movie = mx.symbol.Variable("movie")
-        movie = mx.symbol.Embedding(data=movie, input_dim=self.num_items, output_dim=self.dim_movie)
-
-        y_true = mx.symbol.Variable("softmax_label")
-
-        nn = mx.symbol.concat(user, movie)
-        nn = mx.symbol.flatten(nn)
-        nn = mx.symbol.FullyConnected(data=nn, num_hidden=64)
-        nn = mx.symbol.BatchNorm(data=nn) # First batch norm layer here, before the activaton!
-        nn = mx.symbol.Activation(data=nn, act_type='relu') 
-        nn = mx.symbol.FullyConnected(data=nn, num_hidden=64)
-        nn = mx.symbol.BatchNorm(data=nn) # Second batch norm layer here, before the activation!
-        nn = mx.symbol.Activation(data=nn, act_type='relu')
-        nn = mx.symbol.FullyConnected(data=nn, num_hidden=1)
-
-        y_pred = mx.symbol.LinearRegressionOutput(data=nn, label=y_true)
-
-        self.model = mx.module.Module(context=mx.cpu(), data_names=('user', 'movie'), symbol=y_pred)
-        self.model.fit(X_train, num_epoch=self.epochs, optimizer='adam', optimizer_params=(('learning_rate', 0.001),),
-                eval_metric='rmse', eval_data=X_eval, batch_end_callback=mx.callback.Speedometer(self.batch_size, 256))
-
-    
-    def reconstruct_matrix(self):
-        """
-        Compute the full matrix using A_t and undo normalization
-        """
-        indices = np.indices((NUMBER_OF_USERS,NUMBER_OF_MOVIES))
-        total = NUMBER_OF_USERS * NUMBER_OF_MOVIES
-        X_test = mx.io.NDArrayIter({'user': indices[0].reshape(total), 
-            'movie': indices[1].reshape(total)}, batch_size=self.batch_size)
-        test_preds = self.model.predict(X_test)
-        rec_A = test_preds.asnumpy().reshape((NUMBER_OF_USERS, NUMBER_OF_MOVIES))
         return rec_A
