@@ -394,3 +394,44 @@ class SVT():
             rec_A[:,j] *= self.stddev_A[j]
             rec_A[:,j] += self.mean_A[j]
         return rec_A
+
+class SVD():
+    
+    def __init__(self, A, K=12):
+        self.A = A
+        self.W = (self.A > 0).astype(int)
+        self.num_users, self.num_items = self.A.shape
+        self.K = K
+        self.U = None
+        self.S = None
+        self.Vt = None
+        self.norm_A, self.mean_A, self.stddev_A = zscore_masked_items(self.A, self.W)
+
+    def train(self, test_matrix=None):
+        error_progress = {
+            "train_rmse": [],
+            "test_rmse": [],
+        }
+        # SVD decomposition init U and V
+        self.U, s, self.Vt = np.linalg.svd(self.norm_A, full_matrices=False)
+        # Using the top k eigenvalues
+        self.S = np.zeros((self.num_items , self.num_items))
+        self.S[:self.K, :self.K] = np.diag(s[:self.K])
+        rec_A = self.reconstruct_matrix()
+        train_rmse = get_rmse_score(rec_A, self.A)
+        error_progress["train_rmse"].append(train_rmse)
+        if test_matrix is not None:
+            test_rmse = get_rmse_score(rec_A, test_matrix)
+            error_progress["test_rmse"].append(test_rmse)
+        return error_progress
+        
+    def reconstruct_matrix(self):
+        """
+        Compute the full matrix using U, S and V from SVD and undo normalization.
+        """
+        rec_A = (self.U.dot(self.S)).dot(self.Vt)
+        #undo normalization
+        for j in range(self.num_items):
+            rec_A[:,j] *= self.stddev_A[j]
+            rec_A[:,j] += self.mean_A[j]
+        return rec_A
