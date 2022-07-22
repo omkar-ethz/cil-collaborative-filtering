@@ -9,7 +9,7 @@ Team: 	PICNIC
 | Name  | Email |
 | ------------- | ------------- |
 | Arad Mohammadi | amohammad@student.ethz.ch  |
-| Andreas Tsouloupas | [insert email]@student.ethz.ch  |
+| Andreas Tsouloupas | atsouloupas@student.ethz.ch  |
 | Hsiu-Chi Cheng | chengs@student.ethz.ch  |
 | Omkar Zade  | omzade@student.ethz.ch  |
 
