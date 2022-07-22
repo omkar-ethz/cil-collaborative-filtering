@@ -9,7 +9,7 @@ from utils import get_rmse_score, zscore_masked_items
 
 class IRSVD():
 
-    def __init__(self, A, biases="mean", features=324, eta=0.01, lambda1=0.02, lambda2=0.05, epochs=15):
+    def __init__(self, A, biases="mean", features=325, eta=0.01, lambda1=0.02, lambda2=0.05, epochs=15):
         """
         Perform matrix decomposition to predict empty
         entries in a matrix.
@@ -224,7 +224,7 @@ class Baseline():
 
 class RSVD():
 
-    def __init__(self, A, features=324, eta=0.01, lambda1=0.02, epochs=15):
+    def __init__(self, A, features=325, eta=0.01, lambda1=0.02, epochs=15):
         """
         Perform matrix decomposition to predict empty
         entries in a matrix.
@@ -341,7 +341,7 @@ class SVP():
 
 class SVT():
     
-    def __init__(self, A, eta=1.2, tau=2000, epochs=28):
+    def __init__(self, A, eta=1.2, tau=800, epochs=12):
         self.A = A
         self.W = (self.A > 0).astype(int)
         self.num_users, self.num_items = self.A.shape
@@ -397,7 +397,7 @@ class SVT():
 
 class SVD():
     
-    def __init__(self, A, K=12):
+    def __init__(self, A, K=8):
         self.A = A
         self.W = (self.A > 0).astype(int)
         self.num_users, self.num_items = self.A.shape
