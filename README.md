@@ -1,8 +1,8 @@
-# Collaborative Filtering
+# Collaborative Filtering: Picnic of Ensembled Matrix Factorization Models
 
 This project is part of the Computational Intelligence Lab course (2022) at ETH.
 
-The project website can be found [here](https://www.kaggle.com/competitions/cil-collaborative-filtering-2022/overview).
+Project [Collaborative Filtering](https://www.kaggle.com/competitions/cil-collaborative-filtering-2022/overview).
 
 Team: Picnic
 
@@ -15,31 +15,32 @@ Team: Picnic
 
 
 
-## Project structure
+## Project Structure Tree
 
     .
-    ├── data                               # should contain files
-        ├── ensemble
-            ├── final
-            ├── train
-                ├── 1
-                ├── 2
-                ├── 3
-                ├── 4
-                ├── 5
-                ├── 6
-                ├── 7
-                ├── 8
-                ├── 9
-                ├── 10
-        ├── submissions
-        data_train.csv  sampleSubmission.csv
+    ├── data                               # should contain following files and folders
+    │   ├── ensemble                       # files produced during main.py execution for ensemble of models
+    │   │   ├── final
+    │   │   └── train
+    │   │       ├── 1
+    │   │       ├── 2
+    │   │       ├── 3
+    │   │       ├── 4
+    │   │       ├── 5
+    │   │       ├── 6
+    │   │       ├── 7
+    │   │       ├── 8
+    │   │       ├── 9
+    │   │       └── 10
+    │   ├── submissions
+    │   ├── data_train.csv
+    │   └── sampleSubmission.csv
     ├── experiments_out                    # graphs from experiments
-    ├── report                              
-        ├── report.pdf                     # Final report
+    ├── report
+    │   └── report.pdf                     # CIL report
     ├── requirements.txt
     ├── ensemble.py
-    ├── main.py
+    ├── main.py                            # Reproduce submission
     ├── models.py
     ├── utils.py
     └── README.md
@@ -47,10 +48,10 @@ Team: Picnic
 
 ## Getting Started
 
-To run locally:
+Setup python environment:
 
  ```
- # create environment
+ # create environment (tested with python 3.10.5)
  python -m venv "cil"
  
  # activate environment 
@@ -61,14 +62,14 @@ To run locally:
  
   ```
   
-To replicate final submission: (submission file in folder submissions)
-- Warning: this will take some time
-- Make sure that the project structure is satisfied
+To replicate final submission: (output submission file in folder submissions)
+- Warning: this will take a long time (1 day or more)
+- Make sure that the project structure is the same as above before executing the command
 ```
-python main.py # 
+python main.py
 ```
 
-To replicate individual methods: (submission file in folder submissions)
+To replicate individual methods: (output submission file in folder submissions)
 - Run entire corresponding jupyter notebook
     - [Singular Value Decomposition (SVD) Baseline1](./svd.ipynb)
     - [Alternating Least Squares (ALS) Baseline2](./baseline.ipynb)
@@ -76,10 +77,10 @@ To replicate individual methods: (submission file in folder submissions)
     - [Singular Value Projection (SVP)](./svp.ipynb)
     - [Singular Value Thresholding (SVT)](./svt.ipynb)
     - [Reqularized SVD (RSVD)](./rsvd.ipynb)
-    - [Improved Reqularized SVD (RSVD)](./irsvd.ipynb)
+    - [Improved Reqularized SVD (IRSVD)](./irsvd.ipynb)
 
 To replicate experiments:
 Run (all) the jupyter notebook [experiments.ipynb](./experiments.ipynb) which also performs cross-validation
 
-## Paper Report
-[Report](./report/report.pdf)
+## Documentation (Report)
+[Report](./report/report_cil.pdf)
