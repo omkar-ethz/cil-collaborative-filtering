@@ -57,7 +57,7 @@ To run locally:
  source cil/bin/activate
 
  # install dependencies 
- pip install --user -r requirements.txt
+ pip install -r requirements.txt
  
   ```
   
