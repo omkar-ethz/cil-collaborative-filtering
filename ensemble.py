@@ -34,7 +34,9 @@ class Ensemble():
             X_ensemble = np.ones((1, val_pred.shape[0]))
             
             path = "./data/ensemble/train/"+str(idx+1)+"/"
-            for file in os.listdir(path):
+            dir_lst = sorted(os.listdir(path))
+            # print(dir_lst)
+            for file in dir_lst:
                 if file.endswith(".npy"):
                     rec_A = np.load(os.path.join(path, file))
                     pred = rec_A[val_users, val_movies]
@@ -61,7 +63,9 @@ class Ensemble():
         if on_fold and self.fold is not None:
             path = "./data/ensemble/train/"+str(self.fold)+"/"
         idx = 1
-        for file in os.listdir(path):
+        dir_lst = sorted(os.listdir(path))
+        # print(dir_lst)
+        for file in dir_lst:
             if file.endswith(".npy"):
                 if rec_A is None:
                     rec_A = np.load(os.path.join(path, file)) * self.avg_weights[idx]

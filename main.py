@@ -29,7 +29,7 @@ def generate_ensembles():
         
         for param in params:
             biases, features, eta, lambda1, lambda2, epochs = param
-            fname = " irsvd_"+biases+"_"+str(features)+"_"+str(epochs)
+            fname = "irsvd_"+biases+"_"+str(features)+"_"+str(epochs)
             print(param)
             model = IRSVD(train_matrix, biases=biases, features=features,
                         eta=eta, lambda1=lambda1, lambda2=lambda2, epochs=epochs)
@@ -194,7 +194,7 @@ def generate_ensembles():
         extract_for_ensemble(rec_matrix, fname, 0, train=False)
     
     # SVD
-    params = [9,]
+    params = [8,]
 
     for idx, (train_set, test_set) in enumerate(kf.split(data_pd)):
         train_data = data_pd.iloc[train_set]
@@ -207,7 +207,7 @@ def generate_ensembles():
             k = param
             fname = "svd_"+str(k)
             print(param)
-            model = SVD(train_matrix, K=8)
+            model = SVD(train_matrix, K=k)
             print(model.train(test_matrix=test_matrix))
             rec_matrix = model.reconstruct_matrix()
             extract_for_ensemble(rec_matrix, fname, idx+1, train=True)
@@ -219,7 +219,7 @@ def generate_ensembles():
         k = param
         fname = "svd_"+str(k)
         print(param)
-        model = SVD(train_matrix, K=8)
+        model = SVD(train_matrix, K=k)
         print(model.train())
         rec_matrix = model.reconstruct_matrix()
         extract_for_ensemble(rec_matrix, fname, 0, train=False)
