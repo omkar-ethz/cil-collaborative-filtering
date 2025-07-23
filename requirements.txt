@@ -18,7 +18,7 @@ defusedxml==0.7.1
 entrypoints==0.4
 executing==0.8.3
 fastjsonschema==2.15.3
-fonttools==4.33.3
+fonttools==4.43.0
 google-auth==2.6.4
 google-auth-oauthlib==0.4.6
 graphviz==0.8.4
