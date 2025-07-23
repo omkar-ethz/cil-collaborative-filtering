@@ -25,7 +25,7 @@ graphviz==0.8.4
 grpcio==1.44.0
 idna==3.7
 ipykernel==6.13.0
-ipython==8.2.0
+ipython==8.10.0
 ipython-genutils==0.2.0
 ipywidgets==7.7.0
 jedi==0.18.1
